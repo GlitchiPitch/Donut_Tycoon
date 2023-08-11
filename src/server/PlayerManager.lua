@@ -160,7 +160,7 @@ end
 function playerManager.OnPlayerRemoving(player)
 	print(player)
 	-- SaveData(player, sessionData[player.UserId])
-	-- playerRemoving:Fire(player)
+	playerRemoving:Fire(player)
 end 
 
 function playerManager.OnClose()

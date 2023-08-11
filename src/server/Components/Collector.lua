@@ -19,7 +19,6 @@ function Collector.new(tycoon, instance)
 end
 
 function Collector:Init()
-
 	self.Prompt = self:CreatePrompt()
 	self.Prompt.Triggered:Connect(function(player)
 		if self.CollectionDonut > 0 then

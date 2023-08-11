@@ -24,6 +24,7 @@ function OwnerDoor:OnTouched(hitPart)
 	local ownerAttribute = self.Instance:GetAttribute("Owner")
 	print(humanoid, player, hasTycoon, ownerAttribute)
 	if not hasTycoon.Value and ownerAttribute == 0 then
+		self.Instance.CanTouch = false
 		self.Instance:SetAttribute("Owner", player.UserId)
 		self.Tycoon.Owner = player
 		hasTycoon.Value = true
