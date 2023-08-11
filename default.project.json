@@ -1,0 +1,28 @@
+{
+  "name": "Donut_Tycoon",
+  "tree": {
+    "$className": "DataModel",
+
+    "ReplicatedStorage": {
+        "$path": "src/replicated"
+    },
+
+    "ServerScriptService": {
+      "$className": "ServerScriptService",
+      "$ignoreUnknownInstances": true,
+      "$path": "src/server"
+    },
+
+    "ServerStorage":{
+      "$className": "ServerStorage",
+      "$ignoreUnknownInstances": true,
+      "$path": "src/storage"
+    },
+
+    "StarterPlayer": {
+      "StarterPlayerScripts": {
+          "$path": "src/client"
+      }
+    }
+  }
+}
