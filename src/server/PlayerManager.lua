@@ -1,6 +1,6 @@
 local Players = game:GetService('Players')
-local DataStoreService = game:GetService('DataStoreService')
-local PlayerData = DataStoreService:GetDataStore('PlayerData')
+-- local DataStoreService = game:GetService('DataStoreService')
+-- local PlayerData = DataStoreService:GetDataStore('PlayerData')
 -- local MarketplaceService = game:GetService('MarketplaceService')
 -- local Gamepasses = require(game:GetService('ServerScriptService').Gamepasses)
 
@@ -45,15 +45,15 @@ local playerRemoving = Instance.new('BindableEvent')
 -- 	return success, result
 -- end
 
-local function SaveData(player, data)
-	local success, result = pcall(function()
-		PlayerData:SetAsync(player.UserId, data)
-	end)
-	if not success then
-		warn(result)
-	end
-	return success
-end
+-- local function SaveData(player, data)
+-- 	local success, result = pcall(function()
+-- 		PlayerData:SetAsync(player.UserId, data)
+-- 	end)
+-- 	if not success then
+-- 		warn(result)
+-- 	end
+-- 	return success
+-- end
 
 local sessionData = {}
 
@@ -89,8 +89,10 @@ function playerManager.OnPlayerAdded(player)
 			Multiplier = 1,
 		}
 	)
-	print(sessionData)
+	-- print(sessionData)
+
 	local leaderstats, hasTycoon = LeaderboardSetup(playerManager.GetMoney(player))
+
 	leaderstats.Parent = player
 	hasTycoon.Parent = player
 	
@@ -135,9 +137,9 @@ function playerManager.GetMultiplier(player)
 end
 
 function playerManager.AddUnlockId(player, id)
-    print(player, id)
+    -- print(player, id)
 	local data = sessionData[player.UserId]
-    print(data)
+    -- print(data)
 	
 	if not table.find(data.UnlockIds, id) then
 		table.insert(data.UnlockIds, id)
@@ -156,8 +158,9 @@ function playerManager.GetUnlockIds(player)
 end
 
 function playerManager.OnPlayerRemoving(player)
-	SaveData(player, sessionData[player.UserId])
-	playerRemoving:Fire(player)
+	print(player)
+	-- SaveData(player, sessionData[player.UserId])
+	-- playerRemoving:Fire(player)
 end 
 
 function playerManager.OnClose()

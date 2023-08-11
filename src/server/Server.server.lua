@@ -23,15 +23,13 @@ local PlayerManager = require(script.Parent.PlayerManager)
 
 --SetDoors()
 
+PlayerManager.Start()
 
+-- game:GetService('Players').PlayerAdded:Connect(function()
+--     print("added")
+-- end)
 
--- wait(1)
-
-print("ok")
-
-game:GetService('Players').PlayerAdded:Connect(function(player)
-    print("added")
-    PlayerManager.Start()
-	local tycoon = Tycoon.new(player, CFrame.new(0,1,0))
-	tycoon:Init()
-end)
+for _, o in pairs(workspace.Spawns:GetChildren()) do 
+    local tycoon = Tycoon.new(o.CFrame)
+    tycoon:Init()
+end

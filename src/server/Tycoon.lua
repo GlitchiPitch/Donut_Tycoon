@@ -8,7 +8,7 @@ local PlayerManager = require(game:GetService('ServerScriptService').PlayerManag
 local tycoonStorage = game:GetService('ServerStorage').TycoonStorage 
 
 local function NewModel(model, cframe)
-    print(model, cframe)
+    -- print(model, cframe)
 	local newModel = model:Clone()
 	newModel:SetPrimaryPartCFrame(cframe)
 	newModel.Parent = workspace
@@ -20,11 +20,11 @@ local Tycoon = {}
 
 Tycoon.__index = Tycoon
 
-function Tycoon.new(player, spawnPoint)
-	print(player, spawnPoint)
+function Tycoon.new(spawnPoint)
+	-- print(spawnPoint)
 	local self = setmetatable({}, Tycoon)
-	self.Owner = player
-	
+	self.Owner = nil
+
 	self._spawn = spawnPoint
     -- print(self._spawn)
 	self._topicEvent = Instance.new('BindableEvent')
@@ -33,15 +33,35 @@ function Tycoon.new(player, spawnPoint)
 end
 
 function Tycoon:Init()
-	print(self._spawn)   
+	-- print(self._spawn)   
 	self.Model = NewModel(template, self._spawn) --.CFrame
+	-- self.Door = self.Model.ownerDoor
+	-- OwnerDoor.new(self, self.Model.ownerDoor)
+	
+
 	--self._spawn:SetAttribute('Occupied', true)
 	--self.Owner.RespawnLocation = self.Model.spawn
 	--self.Owner:LoadCharacter()
+	-- self.Door.Touched:Connect(function(hitPart)
+	-- 	print(hitPart)
+	-- 	local humanoid = hitPart.Parent:FindFirstChild('Humanoid')
+	-- 	local player = game.Players:GetPlayerFromCharacter(humanoid.Parent)
+	-- 	local hasTycoon = player:FindFirstChild('hasTycoon')
+	-- 	local ownerAttribute = self.Door:GetAttribute('Owner')
+
+	-- 	if not hasTycoon.Value and ownerAttribute == 0 then
+	-- 		self.Door:SetAttribute('Owner', player.UserId)
+	-- 		self.Owner = player
+	-- 		hasTycoon.Value = true
+
+	-- 		self:PublishTopic('Button', self.Door:GetAttribute('Id'))
+
+	-- 		self:LoadUnlocks()
+	-- 		self:WaitForExit()
+	-- 		-- self:WaitForRebirth()
+	-- 	end
+	-- end)
 	self:LockAll()
-	self:LoadUnlocks()
-	self:WaitForExit()
-	self:WaitForRebirth()
 	
 end
 
@@ -116,24 +136,24 @@ function Tycoon:WaitForExit()
 	end)
 end
 
-function Tycoon:WaitForRebirth()
-	self:SubscribeTopic('Button', function(id)
-		if id == 'Rebirth' then
-			local spawnPoint = self._spawn
-			local owner = self.Owner
+-- function Tycoon:WaitForRebirth()
+-- 	self:SubscribeTopic('Button', function(id)
+-- 		if id == 'Rebirth' then
+-- 			local spawnPoint = self._spawn
+-- 			local owner = self.Owner
 			
 			
-			PlayerManager.ClearUnlockIds(owner)
-			PlayerManager.SetMoney(owner, 0)
-			self:Destroy()
+-- 			PlayerManager.ClearUnlockIds(owner)
+-- 			PlayerManager.SetMoney(owner, 0)
+-- 			self:Destroy()
 			
-			local tyc = Tycoon.new(owner, spawnPoint)
-			tyc:Init()
+-- 			local tyc = Tycoon.new(owner, spawnPoint)
+-- 			tyc:Init()
 			
-			PlayerManager.AddMultiplier(owner, 1.25)
-		end
-	end)
-end
+-- 			PlayerManager.AddMultiplier(owner, 1.25)
+-- 		end
+-- 	end)
+-- end
 
 function Tycoon:Destroy()
 	self.Model:Destroy()
