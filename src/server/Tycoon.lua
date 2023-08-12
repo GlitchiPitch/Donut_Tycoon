@@ -8,7 +8,6 @@ local PlayerManager = require(game:GetService('ServerScriptService').PlayerManag
 local tycoonStorage = game:GetService('ServerStorage').TycoonStorage 
 
 local function NewModel(model, cframe)
-    -- print(model, cframe)
 	local newModel = model:Clone()
 	newModel:SetPrimaryPartCFrame(cframe)
 	newModel.Parent = workspace
@@ -21,33 +20,19 @@ local Tycoon = {}
 Tycoon.__index = Tycoon
 
 function Tycoon.new(spawnPoint)
-	-- print(spawnPoint)
+
 	local self = setmetatable({}, Tycoon)
 	self.Owner = nil
-
 	self._spawn = spawnPoint
-    -- print(self._spawn)
 	self._topicEvent = Instance.new('BindableEvent')
 	
 	return self
 end
 
 function Tycoon:Init()
-	-- print(self._spawn)   
 	self.Model = NewModel(template, self._spawn) --.CFrame
 	-- self.Door = self.Model.ownerDoor
 	-- OwnerDoor.new(self, self.Model.ownerDoor)
-	
-
-	--self._spawn:SetAttribute('Occupied', true)
-	--self.Owner.RespawnLocation = self.Model.spawn
-	--self.Owner:LoadCharacter()
-	-- self.Door.Touched:Connect(function(hitPart)
-	-- 	print(hitPart)
-	-- 	local humanoid = hitPart.Parent:FindFirstChild('Humanoid')
-	-- 	local player = game.Players:GetPlayerFromCharacter(humanoid.Parent)
-	-- 	local hasTycoon = player:FindFirstChild('hasTycoon')
-	-- 	local ownerAttribute = self.Door:GetAttribute('Owner')
 
 	-- 	if not hasTycoon.Value and ownerAttribute == 0 then
 	-- 		self.Door:SetAttribute('Owner', player.UserId)
@@ -72,6 +57,7 @@ function Tycoon:LoadUnlocks()
 end
 
 function Tycoon:AddComponents(instance)
+
 	for _, tag in ipairs(CollectionService:GetTags(instance)) do
 		local component = componentFolder:FindFirstChild(tag)
 		if component then
@@ -84,17 +70,15 @@ end
 function Tycoon:LockAll()
 	for _, instance in ipairs(self.Model:GetDescendants()) do
 		if CollectionService:HasTag(instance, 'unlockable') then
-            -- print('if')
 			self:Lock(instance)
 		else
-            -- print('else')
 			self:AddComponents(instance)
 		end
 	end
 end
 
 function Tycoon:Unlock(instance, id)
-    print(instance, id)
+    -- print(instance, id)
 	PlayerManager.AddUnlockId(self.Owner, id)
 	
 	CollectionService:RemoveTag(instance, 'unlockable')
@@ -115,7 +99,6 @@ function Tycoon:CreateComponents(instance, componentScript)
 end
 
 function Tycoon:PublishTopic(topicName, ...)
-	--print(topicName, ...)
 	self._topicEvent:Fire(topicName, ...)
 end
 
@@ -157,7 +140,6 @@ end
 
 function Tycoon:Destroy()
 	self.Model:Destroy()
-	--self._spawn:SetAttribute('Occupied', false)
 	self._topicEvent:Destroy()
 end
 
