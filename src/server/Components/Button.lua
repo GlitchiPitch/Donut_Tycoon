@@ -35,7 +35,8 @@ function Button:Press(player)
 	if player == self.Tycoon.Owner and money >= cost then
 		PlayerManager.SetMoney(player, money - cost)
 		self.Tycoon:PublishTopic('Button', id)
-		
+		local sound = self.Instance:FindFirstChildIsA('Sound')
+		sound:Play()
 	end
 end
 

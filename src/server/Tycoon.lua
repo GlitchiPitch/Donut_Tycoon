@@ -30,24 +30,14 @@ function Tycoon.new(spawnPoint)
 end
 
 function Tycoon:Init()
-	self.Model = NewModel(template, self._spawn) --.CFrame
-	-- self.Door = self.Model.ownerDoor
-	-- OwnerDoor.new(self, self.Model.ownerDoor)
+	self.Model = NewModel(template, self._spawn)
 
-	-- 	if not hasTycoon.Value and ownerAttribute == 0 then
-	-- 		self.Door:SetAttribute('Owner', player.UserId)
-	-- 		self.Owner = player
-	-- 		hasTycoon.Value = true
-
-	-- 		self:PublishTopic('Button', self.Door:GetAttribute('Id'))
-
-	-- 		self:LoadUnlocks()
-	-- 		self:WaitForExit()
-	-- 		-- self:WaitForRebirth()
-	-- 	end
-	-- end)
+	
 	self:LockAll()
 	
+	self:SubscribeTopic('Win', function(...)
+		print('Win')
+	end)
 end
 
 function Tycoon:LoadUnlocks()
