@@ -1,13 +1,13 @@
 local Sounds = {}
 
-Sounds.BackgroundMusic = '9125627017'
+Sounds.BackgroundMusic = '9125627017' -- 1846731977
 Sounds.BackgroundFx = '9112835068'
-Sounds.Udgrade = 'id'
+Sounds.Udgrade = '9120089728'
 Sounds.AddDonut = '9114771714' -- 9113651645
-Sounds.Repay = ''
+Sounds.Win = '1842300772'
 Sounds.DropCopper = '9113305107'
-Sounds.GetDonutBox = ''
-Sounds.Sell = ''
-Sounds.BuyStatue = ''
+Sounds.GetDonutBox = '9118772457'
+Sounds.Sell = '3020841054'
+Sounds.BuyStatue = '356817586'
 
 return Sounds

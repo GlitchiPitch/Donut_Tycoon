@@ -1,9 +1,13 @@
 -- local PlayerManager = require(game:GetService('ServerScriptService').PlayerManager)
 
-local itemsFolder = game:GetService('ServerStorage').Items
 
-local DONUT_COST = 300
--- local UPGRADE_COST_UP = 100
+local ServerStorage = game:GetService('ServerStorage')
+
+local itemsFolder = ServerStorage.Items
+local Customers = itemsFolder.Customers:GetChildren()
+
+local CUSTOMER_ANIMATION_ID = "http://www.roblox.com/asset/?id=14417243944"
+local DONUT_COST = 2
 
 local DonutSeller = {}
 
@@ -25,9 +29,13 @@ function DonutSeller.new(tycoon, instance)
 end
 
 function DonutSeller:CreateCustomer()
-	local customer = itemsFolder.customer:Clone()
+	local customer = Customers[math.random(#Customers)]:Clone()
 	customer.Parent = self.Instance
 	customer:PivotTo(self.Instance.spawnCustomer.CFrame * CFrame.new(0,customer:GetExtentsSize().Y/2 - self.Instance.spawnCustomer.Size.Y/2, 0))
+	local humanoid = customer:FindFirstChild('Humanoid')
+	local animation = humanoid:FindFirstChild('purchase')
+	animation.AnimationId = CUSTOMER_ANIMATION_ID
+	humanoid:LoadAnimation(animation):Play()
 	wait(self.Rate)
 	customer:Destroy()
 end

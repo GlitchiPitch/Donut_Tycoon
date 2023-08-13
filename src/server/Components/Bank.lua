@@ -31,14 +31,12 @@ function Bank:Init()
 	end)
 
 	self.Tycoon:SubscribeTopic('SellDonut', function(worth, salary)
-		print('sell')
 		self:ChangeMoneyPlayer(salary)
 		self:OnWorthChange(worth)
 	end)
 
 	self.Tycoon:SubscribeTopic('CheckBalance', function()
 		self.Tycoon:PublishTopic('GetBalance', self.Balance)
-		--self.Tycoon:PublishTopic('CheckBalance', self.Balance)
 	end)
 
 
@@ -79,13 +77,10 @@ function Bank:OnTriggered(player)
 		local currentSalary
 		if donutBox then
 			currentSalary = self.Balance + donutBox:GetAttribute('CollectionDonut')
-			--print(currentSalary)
 			donutBox:Destroy()
 			if currentSalary > self.MaxBalance then
-				print(currentSalary, ' if ')
 				currentSalary = self.MaxBalance - self.Balance
 			end
-			print(currentSalary)
 			self.Tycoon:PublishTopic('WorthChange', currentSalary)
 		end
 	end
