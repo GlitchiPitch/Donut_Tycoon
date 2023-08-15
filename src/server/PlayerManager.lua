@@ -153,7 +153,7 @@ function playerManager.ClearUnlockIds(player)
 end
 
 function playerManager.GetUnlockIds(player)
-	print(sessionData[player.UserId])
+	-- print(sessionData[player.UserId])
 	return sessionData[player.UserId].UnlockIds
 end
 

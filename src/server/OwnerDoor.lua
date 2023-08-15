@@ -1,10 +1,12 @@
+local Tycoon = require(game:GetService('ServerScriptService').Tycoon)
+
 local OwnerDoor = {}
 
 OwnerDoor.__index = OwnerDoor
 
-function OwnerDoor.new(tycoon, instance)
+function OwnerDoor.new(instance)
 	local self = setmetatable({}, OwnerDoor)
-	self.Tycoon = tycoon
+	self.Tycoon = Tycoon.new(instance.Parent.PrimaryPart.CFrame)
 	self.Instance = instance
 	self.Gui = instance.BillboardGui
 
@@ -18,7 +20,9 @@ function OwnerDoor:Init()
 		self:OnTouched(...)
 	end)
 	self.Tycoon:SubscribeTopic('RemoveOwner', function()
+		print('Remove Player')
 		print(self.Tycoon.Owner)
+		self.Instance:SetAttribute("Owner", 0)
 		self.Gui.TextLabel.Text = "Nobody's" .. ' ' .. 'place'
 		self.Instance.CanTouch = true
 	end)
@@ -31,7 +35,7 @@ function OwnerDoor:OnTouched(hitPart)
 	local ownerAttribute = self.Instance:GetAttribute("Owner")
 	-- print(humanoid, player, hasTycoon, ownerAttribute)
 	if not hasTycoon.Value and ownerAttribute == 0 then
-		-- print('if')
+		self.Tycoon:Init()
 		self.Instance.CanTouch = false
 		self.Instance:SetAttribute("Owner", player.UserId)
 		self.Tycoon.Owner = player

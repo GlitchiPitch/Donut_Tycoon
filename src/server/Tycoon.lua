@@ -1,3 +1,14 @@
+
+--[[
+
+	problem is that  teleports are located in server storage and module sets teleport in
+	server storage not in workspace
+
+	maybe others could be some
+
+]]
+
+
 local CollectionService = game:GetService('CollectionService')
 
 local template = game:GetService('ServerStorage').Template
@@ -73,7 +84,7 @@ function Tycoon:Unlock(instance, id)
 	
 	-- CollectionService:RemoveTag(instance, 'unlockable')
 	self:AddComponents(instance)
-	instance.Parent = self.Model
+	instance:Clone().Parent = self.Model
 end
 
 function Tycoon:Lock(instance)
@@ -106,9 +117,10 @@ function Tycoon:WaitForExit()
 		if self.Owner == player then
 			-- self:Destroy()
 			for _, item in pairs(CollectionService:GetTagged('unlockable')) do
-				item.Parent = tycoonStorage
+				item:Destroy()
 			end
 			self.Owner = nil
+			-- print(self.Owner)
 			self:PublishTopic('RemoveOwner')
 			-- need delete only unlockable
 		end
@@ -135,8 +147,12 @@ end
 -- end
 
 function Tycoon:Destroy()
-	self.Model:Destroy()
+	-- self.Model:Destroy()
 	self._topicEvent:Destroy()
+	local owner = self.Owner
+	PlayerManager.ClearUnlockIds(owner)
+	PlayerManager.SetMoney(owner, 0)
+	self:Destroy()
 end
 
 return Tycoon

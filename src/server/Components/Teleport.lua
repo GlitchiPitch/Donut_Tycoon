@@ -23,8 +23,11 @@ function Teleport:CreatePrompt(part)
 end
 
 function Teleport:Activated(startPrompt, targetPart)
-	
+	print('active')
+	print(startPrompt, targetPart)
+	print(startPrompt.Parent, targetPart.Parent)
 	startPrompt.Triggered:Connect(function(player)
+		print('triggered')
 		local character = player.Character
 		if character then
 			character:MoveTo(targetPart.promptAttachment.WorldCFrame.Position)
@@ -34,7 +37,7 @@ function Teleport:Activated(startPrompt, targetPart)
 end
 
 function Teleport:Init()
-	
+	print('teleport init')
 	self:Activated(self:CreatePrompt(self.A), self.B)
 	self:Activated(self:CreatePrompt(self.B), self.A)
 end
