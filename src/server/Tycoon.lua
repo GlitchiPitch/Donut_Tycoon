@@ -71,7 +71,7 @@ function Tycoon:Unlock(instance, id)
     -- print(instance, id)
 	PlayerManager.AddUnlockId(self.Owner, id)
 	
-	CollectionService:RemoveTag(instance, 'unlockable')
+	-- CollectionService:RemoveTag(instance, 'unlockable')
 	self:AddComponents(instance)
 	instance.Parent = self.Model
 end
@@ -104,7 +104,12 @@ end
 function Tycoon:WaitForExit()
 	PlayerManager.PlayerRemoving:Connect(function(player)
 		if self.Owner == player then
-			self:Destroy()
+			-- self:Destroy()
+			for _, item in pairs(CollectionService:GetTagged('unlockable')) do
+				item.Parent = tycoonStorage
+			end
+			self.Owner = nil
+			self:PublishTopic('RemoveOwner')
 			-- need delete only unlockable
 		end
 	end)

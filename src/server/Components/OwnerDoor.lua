@@ -17,6 +17,11 @@ function OwnerDoor:Init()
 	self.Instance.Touched:Connect(function(...)
 		self:OnTouched(...)
 	end)
+	self.Tycoon:SubscribeTopic('RemoveOwner', function()
+		print(self.Tycoon.Owner)
+		self.Gui.TextLabel.Text = "Nobody's" .. ' ' .. 'place'
+		self.Instance.CanTouch = true
+	end)
 end
 
 function OwnerDoor:OnTouched(hitPart)
