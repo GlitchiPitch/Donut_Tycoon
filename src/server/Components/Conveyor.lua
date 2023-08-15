@@ -16,9 +16,7 @@ end
 
 function Conveyor:Init()
 	local belt = self.Instance.belt
-	print(belt.AssemblyLinearVelocity)
 	belt.AssemblyLinearVelocity = belt.CFrame.LookVector * self.Speed
-	print(belt.AssemblyLinearVelocity)
 end
 
 return Conveyor

@@ -7,7 +7,7 @@ local itemsFolder = ServerStorage.Items
 local Customers = itemsFolder.Customers:GetChildren()
 
 local CUSTOMER_ANIMATION_ID = "http://www.roblox.com/asset/?id=14417243944"
-local DONUT_COST = 2
+local DONUT_COST = 10000
 
 local DonutSeller = {}
 

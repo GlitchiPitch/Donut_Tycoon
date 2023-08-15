@@ -105,6 +105,7 @@ function Tycoon:WaitForExit()
 	PlayerManager.PlayerRemoving:Connect(function(player)
 		if self.Owner == player then
 			self:Destroy()
+			-- need delete only unlockable
 		end
 	end)
 end
