@@ -22,6 +22,7 @@ function DonutSeller.new(tycoon, instance)
 	self.Rate = instance:GetAttribute('Rate')
 	self.Balance = 0
 	
+	
 	self.UpgradeButton = instance.upgradeSellerButton
 	self.upgradeValue = 0
 	
@@ -65,13 +66,23 @@ function DonutSeller:Init()
 	end) 
 	
 	coroutine.wrap(function()
-		while wait(self.Rate) do
+		local bool = true
+		self.Tycoon:SubscribeTopic('RemoveOwner', function()
+			print('coroutine is destroying')
+			bool = false
+			print('bool is ', bool)
+			-- print(coroutine.status(self.Coroutine))
+		end)
+		
+		while wait(self.Rate) and bool do
+			print('bool is ', bool)
 			if self:CheckBalance() then
 				self:Sell()
 				self:CreateCustomer()
 			end
 		end
 	end)()
+
 end
 
 return DonutSeller
