@@ -1,6 +1,6 @@
 local Players = game:GetService('Players')
--- local DataStoreService = game:GetService('DataStoreService')
--- local PlayerData = DataStoreService:GetDataStore('PlayerData')
+local DataStoreService = game:GetService('DataStoreService')
+local PlayerData = DataStoreService:GetDataStore('PlayerData')
 -- local MarketplaceService = game:GetService('MarketplaceService')
 -- local Gamepasses = require(game:GetService('ServerScriptService').Gamepasses)
 
@@ -34,26 +34,26 @@ end
 local playerAdded = Instance.new('BindableEvent')
 local playerRemoving = Instance.new('BindableEvent')
 
--- local function LoadData(player)
--- 	local success, result = pcall(function()
--- 		return PlayerData:GetAsync(player.UserId)
--- 	end)
+local function LoadData(player)
+	local success, result = pcall(function()
+		return PlayerData:GetAsync(player.UserId)
+	end)
 	
--- 	if not success then
--- 		warn(result)
--- 	end
--- 	return success, result
--- end
+	if not success then
+		warn(result)
+	end
+	return success, result
+end
 
--- local function SaveData(player, data)
--- 	local success, result = pcall(function()
--- 		PlayerData:SetAsync(player.UserId, data)
--- 	end)
--- 	if not success then
--- 		warn(result)
--- 	end
--- 	return success
--- end
+local function SaveData(player, data)
+	local success, result = pcall(function()
+		PlayerData:SetAsync(player.UserId, data)
+	end)
+	if not success then
+		warn(result)
+	end
+	return success
+end
 
 local sessionData = {}
 
@@ -79,10 +79,10 @@ function playerManager.OnPlayerAdded(player)
 		playerManager.OnCharacterAdded(player, character)
 	end)
 	
-	-- local success, data = LoadData(player)
+	local success, data = LoadData(player)
 	-- print(success, data)
 	sessionData[player.UserId] = Reconcile( 
-		{}, -- if success then data else 
+		if success then data else {}, --  
 		{
 			Money = 0,
 			UnlockIds = {},
@@ -159,7 +159,7 @@ end
 
 function playerManager.OnPlayerRemoving(player)
 	-- print(player)
-	-- SaveData(player, sessionData[player.UserId])
+	SaveData(player, sessionData[player.UserId])
 	playerRemoving:Fire(player)
 end 
 

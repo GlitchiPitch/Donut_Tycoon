@@ -63,7 +63,6 @@ function Tycoon:AddComponents(instance)
 
 	for _, tag in ipairs(CollectionService:GetTags(instance)) do
 		local component = componentFolder:FindFirstChild(tag)
-		-- print(component)
 		if component then
 			self:CreateComponents(instance, component)
 		end
@@ -78,19 +77,14 @@ function Tycoon:LockAll()
 		if CollectionService:HasTag(instance, 'unlockable') then
 			self:Lock(instance)
 		else
-			-- if instance.name == 'teleport' then
-			-- 	print(instance)
-			-- 	print(instance.Parent)
-			-- 	print(instance.Parent.Parent)
-			-- end
+			
 			self:AddComponents(instance)
 		end
 	end
 end
 
 function Tycoon:Unlock(instance, id)
-    -- print(instance, id)
-	
+
 	PlayerManager.AddUnlockId(self.Owner, id)
 	
 	CollectionService:RemoveTag(instance, 'unlockable')
@@ -126,37 +120,11 @@ end
 function Tycoon:WaitForExit()
 	PlayerManager.PlayerRemoving:Connect(function(player)
 		if self.Owner == player then
-			-- print('ExitPlayer')
 			self:PublishTopic('RemoveOwner')
 			self:Destroy()
-			-- for _, item in pairs(CollectionService:GetTagged('unlockable')) do
-			-- 	item:Destroy()
-			-- end
-			-- self.Owner = nil
-			-- print(self.Owner)
-			-- need delete only unlockable
 		end
 	end)
 end
-
--- function Tycoon:WaitForRebirth()
--- 	self:SubscribeTopic('Button', function(id)
--- 		if id == 'Rebirth' then
--- 			local spawnPoint = self._spawn
--- 			local owner = self.Owner
-			
-			
--- 			PlayerManager.ClearUnlockIds(owner)
--- 			PlayerManager.SetMoney(owner, 0)
--- 			self:Destroy()
-			
--- 			local tyc = Tycoon.new(owner, spawnPoint)
--- 			tyc:Init()
-			
--- 			PlayerManager.AddMultiplier(owner, 1.25)
--- 		end
--- 	end)
--- end
 
 function Tycoon:Destroy()
 	-- self.Model:Destroy()
@@ -164,9 +132,9 @@ function Tycoon:Destroy()
 		item:Destroy()
 	end
 	self._topicEvent:Destroy()
-	-- local owner = self.Owner
-	-- PlayerManager.ClearUnlockIds(owner)
-	-- PlayerManager.SetMoney(owner, 0)
+	local owner = self.Owner
+	PlayerManager.ClearUnlockIds(owner)
+	PlayerManager.SetMoney(owner, 0)
 end
 
 return Tycoon
