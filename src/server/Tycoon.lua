@@ -37,13 +37,15 @@ function Tycoon.new(spawnPoint)
 	self._spawn = spawnPoint
 	self._topicEvent = Instance.new('BindableEvent')
 	
+	
 	return self
 end
 
 function Tycoon:Init()
 	self.Model = NewModel(template, self._spawn)
-
 	
+	self.AllItems = {}
+
 	self:LockAll()
 	
 	self:SubscribeTopic('Win', function(...)
@@ -61,6 +63,7 @@ function Tycoon:AddComponents(instance)
 
 	for _, tag in ipairs(CollectionService:GetTags(instance)) do
 		local component = componentFolder:FindFirstChild(tag)
+		-- print(component)
 		if component then
 			self:CreateComponents(instance, component)
 		end
@@ -69,10 +72,17 @@ function Tycoon:AddComponents(instance)
 end
 
 function Tycoon:LockAll()
+
 	for _, instance in ipairs(self.Model:GetDescendants()) do
+		table.insert(self.AllItems, instance)
 		if CollectionService:HasTag(instance, 'unlockable') then
 			self:Lock(instance)
 		else
+			-- if instance.name == 'teleport' then
+			-- 	print(instance)
+			-- 	print(instance.Parent)
+			-- 	print(instance.Parent.Parent)
+			-- end
 			self:AddComponents(instance)
 		end
 	end
@@ -80,11 +90,12 @@ end
 
 function Tycoon:Unlock(instance, id)
     -- print(instance, id)
+	
 	PlayerManager.AddUnlockId(self.Owner, id)
 	
-	-- CollectionService:RemoveTag(instance, 'unlockable')
+	CollectionService:RemoveTag(instance, 'unlockable')
 	self:AddComponents(instance)
-	instance:Clone().Parent = self.Model
+	instance.Parent = self.Model
 end
 
 function Tycoon:Lock(instance)
@@ -115,13 +126,14 @@ end
 function Tycoon:WaitForExit()
 	PlayerManager.PlayerRemoving:Connect(function(player)
 		if self.Owner == player then
-			-- self:Destroy()
-			for _, item in pairs(CollectionService:GetTagged('unlockable')) do
-				item:Destroy()
-			end
-			self.Owner = nil
-			-- print(self.Owner)
+			-- print('ExitPlayer')
 			self:PublishTopic('RemoveOwner')
+			self:Destroy()
+			-- for _, item in pairs(CollectionService:GetTagged('unlockable')) do
+			-- 	item:Destroy()
+			-- end
+			-- self.Owner = nil
+			-- print(self.Owner)
 			-- need delete only unlockable
 		end
 	end)
@@ -148,11 +160,13 @@ end
 
 function Tycoon:Destroy()
 	-- self.Model:Destroy()
+	for _, item in ipairs(self.AllItems) do
+		item:Destroy()
+	end
 	self._topicEvent:Destroy()
-	local owner = self.Owner
-	PlayerManager.ClearUnlockIds(owner)
-	PlayerManager.SetMoney(owner, 0)
-	self:Destroy()
+	-- local owner = self.Owner
+	-- PlayerManager.ClearUnlockIds(owner)
+	-- PlayerManager.SetMoney(owner, 0)
 end
 
 return Tycoon

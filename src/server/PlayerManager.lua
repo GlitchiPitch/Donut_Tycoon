@@ -158,7 +158,7 @@ function playerManager.GetUnlockIds(player)
 end
 
 function playerManager.OnPlayerRemoving(player)
-	print(player)
+	-- print(player)
 	-- SaveData(player, sessionData[player.UserId])
 	playerRemoving:Fire(player)
 end 

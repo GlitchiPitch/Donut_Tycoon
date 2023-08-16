@@ -16,6 +16,7 @@ function OwnerDoor.new(instance)
 end
 
 function OwnerDoor:Init()
+	
 	self.Instance.Touched:Connect(function(...)
 		self:OnTouched(...)
 	end)

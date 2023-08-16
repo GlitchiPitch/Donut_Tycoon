@@ -1,4 +1,3 @@
-local Tycoon = require(script.Parent.Tycoon)
 local PlayerManager = require(script.Parent.PlayerManager)
 local CollectionService = game:GetService('CollectionService')
 local OwnerDoor = require(game:GetService('ServerScriptService').OwnerDoor)
