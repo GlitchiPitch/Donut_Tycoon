@@ -27,19 +27,12 @@ end
 function UpgradeButton:Init()
 	
 	self.Instance.Touched:Connect(function(hitPart)
-		--print('touched', self.Instance)
 		local touchedPlayer = game.Players:GetPlayerFromCharacter(hitPart.Parent)
-		--print(touchedPlayer)
 		local checkOwner = self.Tycoon.Owner == touchedPlayer
-		--print(checkOwner)
-		--print(PlayerManager.GetMoney(self.Tycoon.Owner), self.Instance:GetAttribute('Cost'))
 		
 		local checkMoney = PlayerManager.GetMoney(self.Tycoon.Owner) >= self.Instance:GetAttribute('Cost')
-		--print(checkMoney)
-		--print(self.upgradeValue)
 		
 		if checkOwner and checkMoney then
-			--print(' touched is good ')
 			PlayerManager.SetMoney(self.Tycoon.Owner, PlayerManager.GetMoney(self.Tycoon.Owner) - self.Instance:GetAttribute('Cost'))
 			self.Tycoon:PublishTopic(self.Instance:GetAttribute('Display'))
 			self.Instance:SetAttribute('Cost', self.Instance:GetAttribute('Cost') + UPGRADE_COST_UP)

@@ -6,7 +6,7 @@ function Teleport.new(tycoon,instance)
 	local self = setmetatable({}, Teleport)
 	self.Tycoon = tycoon
 	self.Instance = instance
-	
+
 	self.A = self.Instance.A
 	self.B = self.Instance.B
 	
@@ -23,7 +23,6 @@ function Teleport:CreatePrompt(part)
 end
 
 function Teleport:Activated(startPrompt, targetPart)
-	
 	startPrompt.Triggered:Connect(function(player)
 		local character = player.Character
 		if character then
@@ -34,7 +33,6 @@ function Teleport:Activated(startPrompt, targetPart)
 end
 
 function Teleport:Init()
-	
 	self:Activated(self:CreatePrompt(self.A), self.B)
 	self:Activated(self:CreatePrompt(self.B), self.A)
 end

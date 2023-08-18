@@ -1,4 +1,5 @@
 local PlayerManager = require(game:GetService('ServerScriptService').PlayerManager)
+local Sounds = require(game.ReplicatedStorage.Sounds)
 
 local Button = {}
 
@@ -8,7 +9,9 @@ function Button.new(tycoon, part)
 	local self = setmetatable({}, Button)
 	self.Tycoon = tycoon
 	self.Instance = part
-
+	
+	self.Sound = Sounds.CreateSound(self.Instance, Sounds.Udgrade)
+	
 	return self
 end
 
@@ -29,6 +32,7 @@ function Button:CreatePrompt()
 end
 
 function Button:Press(player)
+	self.Sound:Play()
 	local id = self.Instance:GetAttribute("Id")
 	local cost = self.Instance:GetAttribute("Cost")
 	local money = PlayerManager.GetMoney(player)

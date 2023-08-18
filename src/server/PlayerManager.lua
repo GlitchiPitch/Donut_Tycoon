@@ -153,12 +153,12 @@ function playerManager.ClearUnlockIds(player)
 end
 
 function playerManager.GetUnlockIds(player)
-	print(sessionData[player.UserId])
+	-- print(sessionData[player.UserId])
 	return sessionData[player.UserId].UnlockIds
 end
 
 function playerManager.OnPlayerRemoving(player)
-	print(player)
+	-- print(player)
 	-- SaveData(player, sessionData[player.UserId])
 	playerRemoving:Fire(player)
 end 

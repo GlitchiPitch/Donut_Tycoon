@@ -1,5 +1,5 @@
 -- local PlayerManager = require(game:GetService('ServerScriptService').PlayerManager)
-
+local Sounds = require(game.ReplicatedStorage.Sounds)
 
 local ServerStorage = game:GetService('ServerStorage')
 
@@ -7,7 +7,7 @@ local itemsFolder = ServerStorage.Items
 local Customers = itemsFolder.Customers:GetChildren()
 
 local CUSTOMER_ANIMATION_ID = "http://www.roblox.com/asset/?id=14417243944"
-local DONUT_COST = 10000
+local DONUT_COST = 2
 
 local DonutSeller = {}
 
@@ -21,6 +21,10 @@ function DonutSeller.new(tycoon, instance)
 
 	self.Rate = instance:GetAttribute('Rate')
 	self.Balance = 0
+	
+	self.DonutCost = DONUT_COST
+	
+	self.SellSound = Sounds.CreateSound(self.Instance, Sounds.Sell)
 	
 	self.UpgradeButton = instance.upgradeSellerButton
 	self.upgradeValue = 0
@@ -41,7 +45,8 @@ function DonutSeller:CreateCustomer()
 end
 
 function DonutSeller:Sell()
-	self.Tycoon:PublishTopic('SellDonut', -1, DONUT_COST)
+	self.SellSound:Play()
+	self.Tycoon:PublishTopic('SellDonut', -1, self.DonutCost)
 end
 
 function DonutSeller:ChangeBalance(balance)
@@ -64,14 +69,25 @@ function DonutSeller:Init()
 		self:ChangeBalance(...)
 	end) 
 	
+	self.Tycoon:SubscribeTopic('Upgrade Seller', function(...)
+		self.DonutCost += 2
+	end) 
+	
+	
 	coroutine.wrap(function()
-		while wait(self.Rate) do
+		local bool = true
+		self.Tycoon:SubscribeTopic('RemoveOwner', function()
+			bool = false
+		end)
+		
+		while wait(self.Rate) and bool do
 			if self:CheckBalance() then
 				self:Sell()
 				self:CreateCustomer()
 			end
 		end
 	end)()
+
 end
 
 return DonutSeller

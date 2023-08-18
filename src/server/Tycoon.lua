@@ -1,4 +1,8 @@
+
+
 local CollectionService = game:GetService('CollectionService')
+
+local Sounds = require(game:GetService('ReplicatedStorage').Sounds)
 
 local template = game:GetService('ServerStorage').Template
 local componentFolder = script.Parent.Components
@@ -26,17 +30,20 @@ function Tycoon.new(spawnPoint)
 	self._spawn = spawnPoint
 	self._topicEvent = Instance.new('BindableEvent')
 	
+	
 	return self
 end
 
 function Tycoon:Init()
 	self.Model = NewModel(template, self._spawn)
-
 	
+	self.AllItems = {}
+
 	self:LockAll()
 	
 	self:SubscribeTopic('Win', function(...)
-		print('Win')
+		local sound = Sounds.CreateSound(self.Model, Sounds.Win)
+		sound:Play()
 	end)
 end
 
@@ -58,17 +65,20 @@ function Tycoon:AddComponents(instance)
 end
 
 function Tycoon:LockAll()
+
 	for _, instance in ipairs(self.Model:GetDescendants()) do
+		table.insert(self.AllItems, instance)
 		if CollectionService:HasTag(instance, 'unlockable') then
 			self:Lock(instance)
 		else
+			
 			self:AddComponents(instance)
 		end
 	end
 end
 
 function Tycoon:Unlock(instance, id)
-    -- print(instance, id)
+
 	PlayerManager.AddUnlockId(self.Owner, id)
 	
 	CollectionService:RemoveTag(instance, 'unlockable')
@@ -104,34 +114,21 @@ end
 function Tycoon:WaitForExit()
 	PlayerManager.PlayerRemoving:Connect(function(player)
 		if self.Owner == player then
+			self:PublishTopic('RemoveOwner')
 			self:Destroy()
-			-- need delete only unlockable
 		end
 	end)
 end
 
--- function Tycoon:WaitForRebirth()
--- 	self:SubscribeTopic('Button', function(id)
--- 		if id == 'Rebirth' then
--- 			local spawnPoint = self._spawn
--- 			local owner = self.Owner
-			
-			
--- 			PlayerManager.ClearUnlockIds(owner)
--- 			PlayerManager.SetMoney(owner, 0)
--- 			self:Destroy()
-			
--- 			local tyc = Tycoon.new(owner, spawnPoint)
--- 			tyc:Init()
-			
--- 			PlayerManager.AddMultiplier(owner, 1.25)
--- 		end
--- 	end)
--- end
-
 function Tycoon:Destroy()
-	self.Model:Destroy()
+	-- self.Model:Destroy()
+	for _, item in ipairs(self.AllItems) do
+		item:Destroy()
+	end
 	self._topicEvent:Destroy()
+	local owner = self.Owner
+	PlayerManager.ClearUnlockIds(owner)
+	PlayerManager.SetMoney(owner, 0)
 end
 
 return Tycoon
