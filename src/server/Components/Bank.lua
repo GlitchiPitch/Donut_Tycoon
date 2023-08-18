@@ -47,7 +47,10 @@ function Bank:Init()
 	self.Instance.upgradeFridgeButton.Touched:Connect(function(hitPart)
 		local char = hitPart:FindFirstAncestorWhichIsA('Model')
 		if char:FindFirstChild('Humanoid') and Players:GetPlayerFromCharacter(char) == self.Tycoon.Owner then
-			self:Upgrade()
+			if PlayerManager.GetMoney(self.Tycoon.Owner) >= self.Instance.upgradeFridgeButton:GetAttribute('Cost') then
+				PlayerManager.SetMoney(self.Tycoon.Owner, PlayerManager.GetMoney(self.Tycoon.Owner) - self.Instance.upgradeFridgeButton:GetAttribute('Cost'))
+				self:Upgrade()
+			end
 		end
 
 	end)
@@ -57,7 +60,7 @@ end
 function Bank:Upgrade()
 	self.MaxBalance += UPGRADE_AMOUNT
 	self.Instance.upgradeFridgeButton:SetAttribute('Cost', self.Instance.upgradeFridgeButton:GetAttribute('Cost') + UPGRADE_COST_AMOUNT)
-	print(self.MaxBalance)
+	--print(self.MaxBalance)
 	self:SetDisplay(self.Balance .. '/' .. self.MaxBalance)
 end
 

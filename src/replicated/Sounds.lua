@@ -10,4 +10,12 @@ Sounds.GetDonutBox = '9118772457'
 Sounds.Sell = '3020841054'
 Sounds.BuyStatue = '356817586'
 
+function Sounds.CreateSound(parent, id)
+	local sound = Instance.new('Sound')
+    sound.Parent = parent
+	sound.SoundId = "rbxassetid://" .. id
+	sound.Volume = .1
+	return sound
+end
+
 return Sounds

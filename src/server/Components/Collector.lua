@@ -1,5 +1,7 @@
 local PlayerManager = require(game:GetService('ServerScriptService').PlayerManager)
 local itemsFolder = game:GetService('ServerStorage').Items
+local Sounds = require(game.ReplicatedStorage.Sounds)
+
 local Collector = {}
 
 Collector.__index = Collector
@@ -14,7 +16,8 @@ function Collector.new(tycoon, instance)
 	self.collectLabel = instance.giver.BillboardGui.donut
 
 	self.DonutBox = itemsFolder.DonutBox
-
+	self.AddDonutBoxSound = Sounds.CreateSound(self.Instance, Sounds.AddDonut)
+	
 	return self
 end
 
@@ -25,6 +28,7 @@ function Collector:Init()
 			self:AddDonutBox(player)
 			self.CollectionDonut = 0
 			self.collectLabel.Text = 'Collect: ' .. self.CollectionDonut
+			self.AddDonutBoxSound:Play()
 		end
 	end)
 

@@ -1,4 +1,5 @@
--- local PlayerManager = require(game:GetService('ServerScriptService').PlayerManager)
+local Sounds = require(game.ReplicatedStorage.Sounds)
+
 
 local DonutStatue = {}
 
@@ -9,29 +10,18 @@ function DonutStatue.new(tycoon, instance)
 	
 	self.Tycoon = tycoon
 	self.Instance = instance
+	self.Sound = Sounds.CreateSound(self.Instance, Sounds.BuyStatue) 
 	
-	--self.UpgradeButton = instance.donutStatueButton
+	--self.multiplier = 3
 	
-	self.multiplier = 3
-	
-	self.Cost = 10 ^ self.multiplier
+	--self.Cost = 10 ^ self.multiplier
 		
 	return self
 end
 
 function DonutStatue:Init()
-	--self.Prompt = self:CreatePrompt()
-	--self.Prompt.Triggered:Connect(function(plr)
-	--	if self.Tycoon.Owner == plr and PlayerManager.GetMoney(self.Tycoon.Owner) >= self.Cost then
-			
-	--	end
-	--end)
+	self.Sound:Play()
 end
 
---function DonutStatue:CreatePrompt()
---	local prompt = Instance.new('ProximityPrompt', self.UpgradeButton)
---	prompt.ActionText = self.UpgradeButton:GetAttribute('Display')
---	prompt.ObjectText = self.UpgradeButton:GetAttribute('Cost')
---end
 
 return DonutStatue

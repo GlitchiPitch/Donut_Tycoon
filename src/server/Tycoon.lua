@@ -1,15 +1,8 @@
 
---[[
-
-	problem is that  teleports are located in server storage and module sets teleport in
-	server storage not in workspace
-
-	maybe others could be some
-
-]]
-
 
 local CollectionService = game:GetService('CollectionService')
+
+local Sounds = require(game:GetService('ReplicatedStorage').Sounds)
 
 local template = game:GetService('ServerStorage').Template
 local componentFolder = script.Parent.Components
@@ -49,7 +42,8 @@ function Tycoon:Init()
 	self:LockAll()
 	
 	self:SubscribeTopic('Win', function(...)
-		print('Win')
+		local sound = Sounds.CreateSound(self.Model, Sounds.Win)
+		sound:Play()
 	end)
 end
 
